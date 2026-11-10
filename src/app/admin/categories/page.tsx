@@ -52,10 +52,6 @@ export default function AdminCategoriesPage() {
   };
 
   const handleDeleteTrigger = (category: Category) => {
-    if (category.isDefault) {
-      toast.error("Không thể xóa danh mục mặc định của hệ thống");
-      return;
-    }
     setDeletingCategory(category);
     setConfirmOpen(true);
   };

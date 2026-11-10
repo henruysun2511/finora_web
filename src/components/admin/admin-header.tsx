@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Bell, Search, ShieldCheck, User } from "lucide-react";
+import { Bell, ShieldCheck, User } from "lucide-react";
 
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -27,19 +27,9 @@ export function AdminHeader() {
   };
 
   return (
-    <header className="h-18 sticky top-0 z-30 bg-card/85 backdrop-blur-md border-b border-border/80 px-6 flex items-center justify-between">
-      {/* Search Input */}
-      <div className="relative w-72 max-w-sm hidden sm:block">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-        <input
-          type="text"
-          placeholder="Tìm kiếm danh mục, ví, giao dịch..."
-          className="w-full h-10 pl-10 pr-4 rounded-full bg-muted/50 border border-border/80 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-card transition-all"
-        />
-      </div>
-
+    <header className="h-18 sticky top-0 z-30 bg-card/85 backdrop-blur-md border-b border-border/80 px-6 flex items-center justify-end">
       {/* Right Controls */}
-      <div className="flex items-center gap-3 ml-auto">
+      <div className="flex items-center gap-3">
         <ThemeToggle />
 
         <Button

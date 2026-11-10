@@ -21,6 +21,7 @@ export interface CreateCategoryRequest {
   icon?: string;
   color?: string;
   parentId?: string;
+  isDefault?: boolean;
 }
 
 export interface UpdateCategoryRequest {
@@ -28,6 +29,8 @@ export interface UpdateCategoryRequest {
   icon?: string;
   color?: string;
   parentId?: string;
+  type?: CategoryType;
+  isDefault?: boolean;
 }
 
 export interface CategoryQuery {

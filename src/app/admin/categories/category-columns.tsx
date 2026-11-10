@@ -120,7 +120,6 @@ export const getColumns = ({ onEdit, onDelete }: ColumnProps): ColumnDef<Categor
               <span>Chỉnh sửa</span>
             </DropdownMenuItem>
             <DropdownMenuItem
-              disabled={row.original.isDefault}
               onClick={() => onDelete(row.original)}
               className="text-destructive focus:bg-destructive/10 focus:text-destructive"
             >
