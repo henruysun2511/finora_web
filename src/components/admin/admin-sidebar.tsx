@@ -15,6 +15,8 @@ import {
   Settings,
   LogOut,
   ChevronRight,
+  Bot,
+  ScrollText,
 } from "lucide-react";
 
 import { Logo } from "@/components/common/logo";
@@ -69,6 +71,16 @@ export const navItems: NavItem[] = [
     href: "/admin/users",
     icon: <Users className="size-4" />,
   },
+  {
+  title: "Quản lý Linh vật AI",
+  href: "/admin/mascots",
+  icon: <Bot className="size-4" />,
+},
+{
+  title: "Nhật ký hoạt động",
+  href: "/admin/audit-logs",
+  icon: <ScrollText className="size-4" />,
+},
   {
     title: "Cài đặt hệ thống",
     href: "/admin/settings",
@@ -155,4 +167,3 @@ export function AdminSidebar() {
     </aside>
   );
 }
-
