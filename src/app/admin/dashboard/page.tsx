@@ -1,46 +1,70 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import {
+  Users,
   FolderTree,
-  TrendingUp,
-  TrendingDown,
-  Wallet,
   ArrowUpRight,
   ShieldCheck,
   CheckCircle2,
+  Receipt,
+  Coins,
+  Activity,
+  Bot,
+  ScrollText,
 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
+import { useGetOperationsDashboard } from "@/queries/useDashboardQuery";
+import { useGetCategories } from "@/queries/useCategoryQuery";
+import { formatCurrency } from "@/utils/format";
 
 export default function AdminDashboardPage() {
+  const { data: operations, isLoading: isLoadingOps } = useGetOperationsDashboard();
+  const { data: categories, isLoading: isLoadingCats } = useGetCategories();
+
+  const totalUsers = operations?.userGrowth?.totalUsers ?? 0;
+  const totalVolume = operations?.platformMetrics?.grossMerchandiseVolume ?? 0;
+  const totalTx = operations?.platformMetrics?.totalTransactionsCount ?? 0;
+  const dailyTx = operations?.platformMetrics?.dailyTransactionsCount ?? 0;
+
+  const totalCats = categories?.length ?? 0;
+  const expenseCats = categories?.filter((c) => c.type === "EXPENSE").length ?? 0;
+  const incomeCats = categories?.filter((c) => c.type === "INCOME").length ?? 0;
+
   const stats = [
     {
-      title: "Danh mục hệ thống",
-      value: "24 danh mục",
-      desc: "16 Chi tiêu · 8 Thu nhập",
-      icon: <FolderTree className="size-5 text-primary" />,
+      title: "Tổng người dùng",
+      value: isLoadingOps ? "..." : `${totalUsers} tài khoản`,
+      desc: "Người dùng đăng ký trong hệ thống",
+      icon: <Users className="size-5 text-primary" />,
       color: "border-primary/20 bg-primary/5",
-      link: "/admin/categories",
+      link: "/admin/users",
+      actionText: "Quản lý người dùng",
     },
     {
-      title: "Tổng thu nhập tháng",
-      value: "₫ 48,500,000",
-      desc: "+14.2% so với tháng trước",
-      icon: <TrendingUp className="size-5 text-emerald-500" />,
+      title: "Khối lượng dòng tiền",
+      value: isLoadingOps ? "..." : formatCurrency(totalVolume),
+      desc: "Tổng khối lượng giao dịch luân chuyển",
+      icon: <Coins className="size-5 text-emerald-500" />,
       color: "border-emerald-500/20 bg-emerald-500/5",
     },
     {
-      title: "Tổng chi tiêu tháng",
-      value: "₫ 21,340,000",
-      desc: "-5.8% ngân sách tối ưu",
-      icon: <TrendingDown className="size-5 text-rose-500" />,
-      color: "border-rose-500/20 bg-rose-500/5",
+      title: "Tổng số giao dịch",
+      value: isLoadingOps ? "..." : `${totalTx.toLocaleString("vi-VN")} GD`,
+      desc: dailyTx > 0 ? `+${dailyTx} giao dịch phát sinh hôm nay` : "Giao dịch phát sinh toàn nền tảng",
+      icon: <Receipt className="size-5 text-amber-500" />,
+      color: "border-amber-500/20 bg-amber-500/5",
     },
     {
-      title: "Số ví hoạt động",
-      value: "12 ví",
-      desc: "Đã đồng bộ ngân hàng",
-      icon: <Wallet className="size-5 text-amber-500" />,
-      color: "border-amber-500/20 bg-amber-500/5",
+      title: "Danh mục hệ thống",
+      value: isLoadingCats ? "..." : `${totalCats} danh mục`,
+      desc: `${expenseCats} Chi tiêu · ${incomeCats} Thu nhập`,
+      icon: <FolderTree className="size-5 text-rose-500" />,
+      color: "border-rose-500/20 bg-rose-500/5",
+      link: "/admin/categories",
+      actionText: "Quản lý danh mục",
     },
   ];
 
@@ -56,16 +80,18 @@ export default function AdminDashboardPage() {
             </h1>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground ml-5 mt-1 font-medium">
-            Trung tâm kiểm soát tài chính, phân loại danh mục và giám sát dữ liệu FINORA
+            Trung tâm kiểm soát tài chính, phân loại danh mục và giám sát dữ liệu thời gian thực FINORA
           </p>
         </div>
 
-        <Link href="/admin/categories">
-          <Button className="rounded-full shadow-md shadow-primary/25">
-            <FolderTree className="size-4 mr-2" />
-            <span>Quản lý danh mục</span>
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/admin/categories">
+            <Button className="rounded-full shadow-md shadow-primary/25">
+              <FolderTree className="size-4 mr-2" />
+              <span>Quản lý danh mục</span>
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* 4 Stat Cards */}
@@ -91,41 +117,97 @@ export default function AdminDashboardPage() {
                 {s.desc}
               </p>
             </div>
-            {s.link && (
+            {s.link ? (
               <Link
                 href={s.link}
                 className="mt-4 pt-3 border-t border-border/50 text-xs font-bold text-primary flex items-center justify-between hover:underline"
               >
-                <span>Xem chi tiết danh mục</span>
+                <span>{s.actionText || "Xem chi tiết"}</span>
                 <ArrowUpRight className="size-3.5" />
               </Link>
+            ) : (
+              <div className="mt-4 pt-3 border-t border-border/50 text-xs font-semibold text-muted-foreground/70 flex items-center gap-1">
+                <Activity className="size-3 text-emerald-500 animate-pulse" />
+                <span>Số liệu thời gian thực</span>
+              </div>
             )}
           </div>
         ))}
+      </div>
+
+      {/* Operational Modules Quick Links */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <Link
+          href="/admin/users"
+          className="p-6 rounded-3xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+              <Users className="size-6" />
+            </div>
+            <ArrowUpRight className="size-5 text-muted-foreground group-hover:text-primary transition-colors" />
+          </div>
+          <h3 className="font-bold text-base text-foreground mb-1">Tài khoản & Phân quyền</h3>
+          <p className="text-xs text-muted-foreground">
+            Quản lý người dùng, trạng thái kích hoạt, khóa tài khoản và gán vai trò hệ thống.
+          </p>
+        </Link>
+
+        <Link
+          href="/admin/mascots"
+          className="p-6 rounded-3xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="size-12 rounded-2xl bg-fuchsia-500/10 text-fuchsia-500 flex items-center justify-center">
+              <Bot className="size-6" />
+            </div>
+            <ArrowUpRight className="size-5 text-muted-foreground group-hover:text-fuchsia-500 transition-colors" />
+          </div>
+          <h3 className="font-bold text-base text-foreground mb-1">Quản lý Linh vật AI</h3>
+          <p className="text-xs text-muted-foreground">
+            Thiết lập các mốc tài sản ròng, mã SVG linh vật và kịch bản gợi ý tài chính.
+          </p>
+        </Link>
+
+        <Link
+          href="/admin/audit-logs"
+          className="p-6 rounded-3xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all group"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="size-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+              <ScrollText className="size-6" />
+            </div>
+            <ArrowUpRight className="size-5 text-muted-foreground group-hover:text-amber-500 transition-colors" />
+          </div>
+          <h3 className="font-bold text-base text-foreground mb-1">Nhật ký hoạt động (Audit)</h3>
+          <p className="text-xs text-muted-foreground">
+            Theo dõi lịch sử kiểm toán, truy vết thay đổi dữ liệu và xuất báo cáo kiểm tra.
+          </p>
+        </Link>
       </div>
 
       {/* Feature Showcase Box */}
       <div className="rounded-3xl border border-border bg-card p-8 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-3 max-w-xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold border border-emerald-500/20">
               <ShieldCheck className="size-3.5" />
-              <span>Chuẩn hóa Dữ liệu NestJS</span>
+              <span>Dữ liệu Vận hành Thực tế từ NestJS API</span>
             </div>
             <h2 className="text-xl font-bold text-foreground">
-              Phân loại danh mục tài chính thông minh
+              Hệ thống Tài chính & Phân loại Thông minh
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Hệ thống danh mục hệ thống giúp chuẩn hóa các giao dịch thu nhập và chi tiêu của toàn bộ người dùng, hỗ trợ lập ngân sách tự động và tính toán dòng tiền chính xác.
+              Các chỉ số thống kê trên bảng điều khiển được đồng bộ trực tiếp từ cơ sở dữ liệu FINORA, bảo đảm tính minh bạch, nhất quán và độ trễ thấp nhất cho ban quản trị.
             </p>
             <div className="flex flex-wrap gap-4 pt-2">
               <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
                 <CheckCircle2 className="size-4 text-emerald-500" />
-                <span>Hỗ trợ cây phân cấp Cha - Con</span>
+                <span>Tự động cập nhật số liệu mỗi 30 giây</span>
               </div>
               <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
                 <CheckCircle2 className="size-4 text-emerald-500" />
-                <span>Mã màu và biểu tượng chuẩn hóa</span>
+                <span>Bảo mật dữ liệu theo chuẩn RBAC</span>
               </div>
             </div>
           </div>
@@ -143,4 +225,3 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
-

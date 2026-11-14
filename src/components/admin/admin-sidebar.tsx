@@ -6,13 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   FolderTree,
-  Wallet,
-  ArrowLeftRight,
-  PiggyBank,
-  HandCoins,
-  BarChart3,
   Users,
-  Settings,
   LogOut,
   ChevronRight,
   Bot,
@@ -37,54 +31,24 @@ export const navItems: NavItem[] = [
     icon: <LayoutDashboard className="size-4" />,
   },
   {
-    title: "Danh mục hệ thống",
-    href: "/admin/categories",
-    icon: <FolderTree className="size-4" />,
-  },
-  {
-    title: "Ví & Tài khoản",
-    href: "/admin/wallets",
-    icon: <Wallet className="size-4" />,
-  },
-  {
-    title: "Giao dịch",
-    href: "/admin/transactions",
-    icon: <ArrowLeftRight className="size-4" />,
-  },
-  {
-    title: "Ngân sách",
-    href: "/admin/budgets",
-    icon: <PiggyBank className="size-4" />,
-  },
-  {
-    title: "Sổ nợ & Khoản vay",
-    href: "/admin/loans",
-    icon: <HandCoins className="size-4" />,
-  },
-  {
-    title: "Báo cáo tài chính",
-    href: "/admin/reports",
-    icon: <BarChart3 className="size-4" />,
-  },
-  {
     title: "Tài khoản & Phân quyền",
     href: "/admin/users",
     icon: <Users className="size-4" />,
   },
   {
-  title: "Quản lý Linh vật AI",
-  href: "/admin/mascots",
-  icon: <Bot className="size-4" />,
-},
-{
-  title: "Nhật ký hoạt động",
-  href: "/admin/audit-logs",
-  icon: <ScrollText className="size-4" />,
-},
+    title: "Danh mục hệ thống",
+    href: "/admin/categories",
+    icon: <FolderTree className="size-4" />,
+  },
   {
-    title: "Cài đặt hệ thống",
-    href: "/admin/settings",
-    icon: <Settings className="size-4" />,
+    title: "Quản lý Linh vật AI",
+    href: "/admin/mascots",
+    icon: <Bot className="size-4" />,
+  },
+  {
+    title: "Nhật ký hoạt động",
+    href: "/admin/audit-logs",
+    icon: <ScrollText className="size-4" />,
   },
 ];
 

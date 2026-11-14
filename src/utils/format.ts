@@ -4,6 +4,9 @@ export function formatVnd(amount: number): string {
   return `${sign}${formatted}`;
 }
 
+export const formatCurrency = formatVnd;
+
+
 export function formatDate(dateString?: string | Date): string {
   if (!dateString) return "";
   const d = new Date(dateString);

@@ -73,9 +73,6 @@ export default function LoginPage() {
         <h1 className="text-2xl font-black text-foreground tracking-tight">
           Đăng nhập Quản trị
         </h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Hệ thống Quản lý Tài chính & Báo cáo Thông minh FINORA
-        </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -149,12 +146,6 @@ export default function LoginPage() {
           )}
         </Button>
       </form>
-
-      <div className="mt-8 pt-6 border-t border-border/60 text-center">
-        <p className="text-xs text-muted-foreground">
-          Finora Admin Portal · Kết nối NestJS Backend API
-        </p>
-      </div>
     </div>
   );
 }
